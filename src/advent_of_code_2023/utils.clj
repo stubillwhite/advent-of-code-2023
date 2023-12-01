@@ -13,9 +13,6 @@
   [name & decls]
   (list* `defmethod (with-meta name (assoc (meta name) :private true)) decls))
 
-(defn parse-long [s]
-  (Long/parseLong (string/trim s)))
-
 (defn sum [coll]
   (apply + coll))
 
