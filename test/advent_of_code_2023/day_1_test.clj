@@ -25,6 +25,9 @@
                      "zoneight234"
                      "7pqrstsixteen"]))
 
+(deftest extract-digits-given-overlaps-then-extracts-all
+  (is (= [1 2 1 8 3 7 9 8 1] (into [] (extract-digits word-to-digit "1twoneighthreeskipsevenineightskip1")))))
+
 (deftest solution-part-two-given-example-input-then-example-result
   (is (= 281 (solution-part-two example-input-two))))
 
