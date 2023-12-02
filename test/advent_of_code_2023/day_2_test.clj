@@ -4,7 +4,7 @@
             [clojure.string :as string]
             [clojure.test :refer :all]))
 
-(def example-input
+(def- example-input
   (string/join "\n" ["Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green"
                      "Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue"
                      "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red"
@@ -16,4 +16,10 @@
 
 (deftest solution-part-one-given-problem-input-then-correct-result
   (is (= 2716 (solution-part-one problem-input))))
+
+(deftest solution-part-two-given-example-input-then-example-result
+  (is (= 2286 (solution-part-two example-input))))
+
+(deftest solution-part-two-given-problem-input-then-correct-result
+  (is (= 72227 (solution-part-two problem-input))))
 
