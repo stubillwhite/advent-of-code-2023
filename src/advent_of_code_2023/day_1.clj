@@ -23,53 +23,32 @@
        (mapcat (fn [w] (re-seq-matches (re-pattern w) s)))
        (sort-by :start)))
 
-(def- num-to-digit {"1" 1
-                    "2" 2
-                    "3" 3
-                    "4" 4
-                    "5" 5
-                    "6" 6
-                    "7" 7
-                    "8" 8
-                    "9" 9})
+(def- numeral-mapper
+  (into {} (for [x (range 1 10)] [(str x) (str x)])))
 
-(defn extract-digits [decoder s]
-  (->> (indices-of s (keys decoder))
+(defn extract-digits [mapper s]
+  (->> (indices-of s (keys mapper))
        (map :group)
-       (map decoder)))
+       (map mapper)))
 
 (defn- calibration-value [coll]
   (parse-long (str (first coll) (last coll))))
 
 (defn solution-part-one [input]
   (->> (parse-input input)
-       (map (partial extract-digits num-to-digit))
+       (map (partial extract-digits numeral-mapper))
        (map calibration-value)
        (sum)))
 
 ;; Part two
 
-(def word-to-digit {"one"   1
-                    "two"   2
-                    "three" 3
-                    "four"  4
-                    "five"  5
-                    "six"   6
-                    "seven" 7
-                    "eight" 8
-                    "nine"  9
-                    "1"     1
-                    "2"     2
-                    "3"     3
-                    "4"     4
-                    "5"     5
-                    "6"     6
-                    "7"     7
-                    "8"     8
-                    "9"     9})
+(def numeral-and-word-mapper
+  (let [words ["one" "two" "three" "four" "five" "six" "seven" "eight" "nine"]]
+    (merge numeral-mapper
+           (into {} (map-indexed (fn [idx x] [x (str (inc idx))]) words)))))
 
 (defn solution-part-two [input]
   (->> (parse-input input)
-       (map (partial extract-digits word-to-digit))
+       (map (partial extract-digits numeral-and-word-mapper))
        (map calibration-value)
        (sum)))
