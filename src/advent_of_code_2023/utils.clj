@@ -16,6 +16,9 @@
 (defn sum [coll]
   (apply + coll))
 
+(defn product [coll]
+  (apply * coll))
+
 (defn re-seq-matches [re s]
   (let [m (re-matcher re s)]
     ((fn step []

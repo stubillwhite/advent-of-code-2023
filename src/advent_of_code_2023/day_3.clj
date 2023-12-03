@@ -1,8 +1,8 @@
 (ns advent-of-code-2023.day-3
-  (:require [advent-of-code-2023.utils :refer [sum def- re-seq-matches]]
+  (:require [advent-of-code-2023.utils :refer [def- product re-seq-matches sum]]
             [clojure.java.io :as io]
-            [clojure.string :as string]
-            [clojure.set :refer [intersection]]))
+            [clojure.set :refer [intersection]]
+            [clojure.string :as string]))
 
 (def problem-input
   (string/trim (slurp (io/resource "day-3-input.txt"))))
@@ -25,29 +25,35 @@
 (defn- filter-map [f m]
   (into {} (filter f) m))
 
-(defn- neighbour-locations [[x y]]
+(defn- adjacent-locations [[x y]]
   (let [deltas (for [dx (range -1 2)
                      dy (range -1 2)
                      :when (not (= [dx dy] [0 0]))]
                  [dx dy])]
     (for [[dx dy] deltas] [(+ x dx) (+ y dy)])))
 
-(defn- numbers-neighbouring-symbols [numbers symbols]
-  (let [coords-of-chars (fn [[x y] s] (for [dx (range (count s))] [(+ x dx) y]))]
-    (filter-map
-     (fn [[coords number]]
-       (not-empty
-        (let [num-neighbour-coords (set (mapcat neighbour-locations (coords-of-chars coords number)))
-              sym-coords           (set (keys symbols))]
-          (intersection num-neighbour-coords sym-coords))))
-     numbers)))
+(defn- adjacent-symbols [symbols number]
+  (let [[[x y] word]    number
+        coords-of-chars (for [dx (range (count word))] [(+ x dx) y])
+        adjacent-coords (set (mapcat adjacent-locations coords-of-chars))]
+    (filter-map (fn [[coords s]] (contains? adjacent-coords coords)) symbols)))
 
 (defn solution-part-one [input]
   (let [{:keys [numbers symbols]} (parse-input input)]
-    (->> (numbers-neighbouring-symbols numbers symbols)
+    (->> (group-by (partial adjacent-symbols symbols) (seq numbers))
+         (filter-map (fn [[k v]] (not-empty k)))
          (vals)
-         (map parse-long)
+         (mapcat (fn [nums] (map parse-long (vals nums))))
          (sum))))
 
+;; Part two
 
+(defn solution-part-two [input] 
+  (let [{:keys [numbers symbols]} (parse-input input)
+        gear-symbols              (filter-map (fn [[coords s]] (= s "*")) symbols)]
+    (->> (group-by (partial adjacent-symbols gear-symbols) (seq numbers))
+         (filter (fn [[sym nums]] (= (count nums) 2)))
+         (vals)
+         (map (fn [nums] (product (map parse-long (vals nums)))))
+         (sum))))
 

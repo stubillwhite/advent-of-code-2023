@@ -1,5 +1,5 @@
 (ns advent-of-code-2023.day-2
-  (:require [advent-of-code-2023.utils :refer [sum def-]]
+  (:require [advent-of-code-2023.utils :refer [sum def- product]]
             [clojure.java.io :as io]
             [clojure.string :as string]))
 
@@ -44,7 +44,7 @@
   (assoc game :min-numbers (apply merge-with max handfuls)))
 
 (defn- powerset [{:keys [min-numbers]}]
-  (reduce * (vals min-numbers)))
+  (product (vals min-numbers)))
 
 (defn solution-part-two [input]
   (->> (parse-input input)
