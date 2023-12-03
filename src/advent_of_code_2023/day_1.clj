@@ -1,5 +1,5 @@
 (ns advent-of-code-2023.day-1
-  (:require [advent-of-code-2023.utils :refer [sum def-]]
+  (:require [advent-of-code-2023.utils :refer [sum def- re-seq-matches]]
             [clojure.java.io :as io]
             [clojure.string :as string]))
 
@@ -10,13 +10,6 @@
   (->> input
        (string/split-lines)
        (into [])))
-
-(defn- re-seq-matches [re s]
-  (let [m (re-matcher re s)]
-    ((fn step []
-       (when (. m (find))
-         (cons {:start (. m start) :end (. m end) :group (. m group)}
-               (lazy-seq (step))))))))
 
 (defn- indices-of [s words]
   (->> words

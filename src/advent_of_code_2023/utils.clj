@@ -16,5 +16,9 @@
 (defn sum [coll]
   (apply + coll))
 
-(defn find-first [pred coll]
-  (first (filter pred coll)))
+(defn re-seq-matches [re s]
+  (let [m (re-matcher re s)]
+    ((fn step []
+       (when (. m (find))
+         (cons {:start (. m start) :end (. m end) :group (. m group)}
+               (lazy-seq (step))))))))
