@@ -32,28 +32,28 @@
                  [dx dy])]
     (for [[dx dy] deltas] [(+ x dx) (+ y dy)])))
 
-(defn- adjacent-symbols [symbols number]
+(defn- adjacent-symbol [symbols number]
   (let [[[x y] word]    number
         coords-of-chars (for [dx (range (count word))] [(+ x dx) y])
         adjacent-coords (set (mapcat adjacent-locations coords-of-chars))]
-    (filter-map (fn [[coords s]] (contains? adjacent-coords coords)) symbols)))
+    (first (filter-map (fn [[coords s]] (contains? adjacent-coords coords)) symbols))))
 
 (defn solution-part-one [input]
-  (let [{:keys [numbers symbols]} (parse-input input)]
-    (->> (group-by (partial adjacent-symbols symbols) (seq numbers))
-         (filter-map (fn [[k v]] (not-empty k)))
+  (let [{:keys [numbers symbols]} (parse-input input)
+        adjacent-to-symbol?       (fn [[[coords sym] nums]] (and (not= sym nil) (not-empty nums)))]
+    (->> (group-by (partial adjacent-symbol symbols) (seq numbers))
+         (filter-map adjacent-to-symbol?)
          (vals)
          (mapcat (fn [nums] (map parse-long (vals nums))))
          (sum))))
 
 ;; Part two
 
-(defn solution-part-two [input] 
+(defn solution-part-two [input]
   (let [{:keys [numbers symbols]} (parse-input input)
-        gear-symbols              (filter-map (fn [[coords s]] (= s "*")) symbols)]
-    (->> (group-by (partial adjacent-symbols gear-symbols) (seq numbers))
-         (filter (fn [[sym nums]] (= (count nums) 2)))
+        gear?                     (fn [[[coords sym] nums]] (and (= sym "*") (= (count nums) 2)))]
+    (->> (group-by (partial adjacent-symbol symbols) (seq numbers))
+         (filter-map gear?)
          (vals)
          (map (fn [nums] (product (map parse-long (vals nums)))))
          (sum))))
-
