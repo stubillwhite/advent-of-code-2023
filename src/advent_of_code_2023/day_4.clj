@@ -12,7 +12,8 @@
         parse-numbers                      (fn [s] (->> (re-seq #"\d+" s) (map parse-long) (vec)))]
     {:n               (parse-long n)
      :card-numbers    (parse-numbers card-numbers)
-     :winning-numbers (parse-numbers winning-numbers)}))
+     :winning-numbers (parse-numbers winning-numbers)
+     :copies          1}))
 
 (defn- parse-input [input]
   (->> (string/split-lines input)
@@ -21,11 +22,31 @@
 (defn- pow [x y]
   (long (Math/pow x y)))
 
-(defn- score-card [{:keys [n card-numbers winning-numbers]}]
-  (let [matches (intersection (set card-numbers) (set winning-numbers))]
-    (pow 2 (dec (count matches)))))
+(defn- matches [{:keys [card-numbers winning-numbers]}]
+  (count (intersection (set card-numbers) (set winning-numbers))))
+
+(defn- score-card-naively [card]
+  (pow 2 (dec (matches card))))
 
 (defn solution-part-one [input]
   (->> (parse-input input)
-       (map score-card)
+       (map score-card-naively)
        (sum)))
+
+;; Part two
+
+(defn- copy-next-n-cards [cards n times]
+  (lazy-cat (map (fn [c] (update c :copies (partial + times))) (take n cards))
+            (drop n cards)))
+
+(defn- score-cards [cs]
+  (loop [cards cs
+         n     0]
+    (if (empty? cards)
+      n
+      (let [[card & remaining] cards]
+        (recur (copy-next-n-cards remaining (matches card) (:copies card))
+               (+ n (:copies card)))))))
+
+(defn solution-part-two [input]
+  (score-cards (parse-input input)))
