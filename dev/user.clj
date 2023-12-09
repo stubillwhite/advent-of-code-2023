@@ -7,12 +7,17 @@
             [taoensso.timbre :as timbre]
             [clojure.test :as test]
             [clojure.edn :as edn]
+            [clojure.spec.alpha :as spec]
             [clojure.tools.namespace.repl :refer [refresh refresh-all]]
             [clojure.tools.trace :refer [trace-ns untrace-ns]]
+            [expound.alpha :as expound]
             [mount.core :as mount]))
 
 (timbre/refer-timbre)
 (timbre/set-level! (keyword :warn))
+
+(spec/check-asserts true)
+(set! spec/*explain-out* expound/printer)
 
 (defn print-methods [x]
   (->> x

@@ -18,10 +18,13 @@
            :thread-count 4
            :test-warn-time 250}
   
-  :dependencies [;; core
+  :dependencies [;; Core
                  [org.clojure/tools.nrepl "0.2.13"]
                  [org.clojure/clojure "1.11.1"]
                  [org.clojure/tools.trace "0.7.11"]
+
+                 ;; Spec helpers
+                 [expound "0.9.0"]
 
                  ;; Logging
                  [com.taoensso/timbre "6.3.1"]
