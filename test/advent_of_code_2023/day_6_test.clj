@@ -12,4 +12,10 @@
   (is (= 288 (solution-part-one example-input))))
 
 (deftest solution-part-one-given-problem-input-then-correct-result
-  (is (= 275724,tn (solution-part-one problem-input))))
+  (is (= 275724 (solution-part-one problem-input))))
+
+(deftest solution-part-two-given-example-input-then-example-result
+  (is (= 71503 (solution-part-two example-input))))
+
+(deftest solution-part-two-given-problem-input-then-correct-result
+  (is (= 37286485 (solution-part-two problem-input))))
