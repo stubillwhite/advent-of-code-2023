@@ -57,5 +57,3 @@
 (defn solution-part-two [input]
   (let [race (parse-input-without-spaces input)]
     (count-of-button-times (limits-of-button-time-to-beat-record race))))
-
-
