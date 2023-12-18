@@ -16,8 +16,11 @@
 (timbre/refer-timbre)
 (timbre/set-level! (keyword :warn))
 
-(spec/check-asserts true)
-(set! spec/*explain-out* expound/printer)
+
+(defn- enforce-spec [x]
+  (do
+    (spec/check-asserts x)
+    (set! spec/*explain-out* expound/printer)))
 
 (defn print-methods [x]
   (->> x
@@ -34,7 +37,9 @@
   (edn/read-string (slurp fnam)))
 
 (defn start []
-  (mount/start))
+  (do
+    (enforce-spec true)
+    (mount/start)))
 
 (defn stop []
   (mount/stop))

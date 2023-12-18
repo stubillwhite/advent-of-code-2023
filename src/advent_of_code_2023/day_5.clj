@@ -125,7 +125,7 @@
     (iter range [] mappings)))
 
 (defn translate-ranges [{:keys [seeds categories]}]
-  (let [seed-ranges      (to-seed-ranges seeds)
+  (let [seed-ranges    (to-seed-ranges seeds)
         apply-mappings (fn [ranges mappings]
                          (->> ranges
                               (mapcat (partial translate-range mappings))
