@@ -17,4 +17,10 @@
 (deftest solution-part-one-given-problem-input-then-correct-result
   (is (= 250898830 (solution-part-one problem-input))))
 
+(deftest solution-part-two-given-example-input-then-example-result
+  (is (= 5905 (solution-part-two example-input))))
+
+(deftest solution-part-two-given-problem-input-then-correct-result
+  (is (= 252127335 (solution-part-two problem-input))))
+
 

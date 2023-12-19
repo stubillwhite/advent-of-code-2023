@@ -25,3 +25,6 @@
        (when (. m (find))
          (cons {:start (. m start) :end (. m end) :group (. m group)}
                (lazy-seq (step))))))))
+
+(defn map-vals [f m]
+  (into {} (for [[k v] m] [k (f v)])))
