@@ -28,3 +28,10 @@
 
 (defn map-vals [f m]
   (into {} (for [[k v] m] [k (f v)])))
+
+(defn take-until [pred coll]
+  (lazy-seq
+    (when-let [s (seq coll)]
+      (if (pred (first s))
+        (cons (first s) nil)
+        (cons (first s) (take-until pred (rest s)))))))
